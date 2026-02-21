@@ -5,14 +5,19 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@workspace/utils/*" : ["../../packages/utils/src/*"],
+      "@workspace/db/*" : ["../../packages/db/src/*"]
+    }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
     "next.config.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/utils/types/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }

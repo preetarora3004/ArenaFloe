@@ -1,0 +1,17 @@
+{
+  "name": "@workspace/utils",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5",
+    "next-auth": "^4.24.13",
+    "@workspace/db": "workspace:*",
+    "zod": "^4.3.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.3.0",
+    "jsonwebtoken": "^9.0.3"
+  }
+}

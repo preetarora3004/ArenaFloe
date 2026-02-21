@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String   @id @default(cuid())
+  username String   @unique
+  password String
+  role     Role     @default(user)
+  ticket   Ticket[]
+  staff    Staff?
+  referal  Referal?
+  cart     Cart?
+}
+
+model Staff {
+  id       String    @id @default(cuid())
+  user     User      @relation(fields: [userId], references: [id])
+  userId   String    @unique
+  type     StaffType @default(workers)
+  assigned Event[]   @relation("EventStaff")
+  vendors  Vendors?
+}
+
+model Vendors {
+  id        String     @id @default(cuid())
+  staff     Staff      @relation(fields: [staffId], references: [id])
+  staffId   String     @unique
+  inventory Inventory?
+}
+
+model Inventory {
+  id       String  @id @default(cuid())
+  vendor   Vendors @relation(fields: [vendorId], references: [id])
+  vendorId String  @unique
+  item     Items[]
+}
+
+model Cart {
+  id    String @id @default(cuid())
+  name  String
+  price Int
+  qty   Int
+
+  item   Items  @relation(fields: [itemId], references: [id])
+  itemId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model Referal {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String    @unique
+  role      StaffType @default(workers)
+}
+
+model Items {
+  id          String       @id @default(cuid())
+  name        String
+  price       String
+  description String
+  category    FoodCategory @default(food)
+  inventory   Inventory    @relation(fields: [inventoryId], references: [id])
+  inventoryId String       @unique
+  stock       Int
+  cart        Cart?
+}
+
+model Merchandise {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  price       Int
+  stock       Int
+}
+
+model Ticket {
+  id        String   @id @default(cuid())
+  startTime DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  seat   Seat   @relation(fields: [seatId], references: [id])
+  seatId String
+
+  status  TicketStatus @default(booked)
+  price   Int
+  qrCode  String       @unique
+  endTime DateTime
+}
+
+model Section {
+  id        String  @id @default(cuid())
+  name      String
+  stadium   Stadium @relation(fields: [stadiumId], references: [id])
+  stadiumId String
+  capacity  Int
+
+  seats Seat[]
+}
+
+model Seat {
+  id        String   @id @default(cuid())
+  number    Int
+  section   Section  @relation(fields: [sectionId], references: [id])
+  sectionId String
+  tickets   Ticket[]
+}
+
+model Stadium {
+  id       String @id @default(cuid())
+  name     String
+  capacity Int
+
+  section Section[]
+  events  Event[]
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  date      DateTime @default(now())
+  stadium   Stadium  @relation(fields: [stadiumId], references: [id])
+  stadiumId String
+
+  ticket Ticket[]
+  staff  Staff[]  @relation("EventStaff")
+}
+
+enum Role {
+  user
+  vendor
+  security
+  admin
+}
+
+enum FoodCategory {
+  food
+  snacks
+  beverages
+  other
+}
+
+enum TicketStatus {
+  booked
+  cancelled
+  pending
+}
+
+enum StaffType {
+  security
+  vendors
+  workers
+}

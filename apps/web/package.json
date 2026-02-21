@@ -11,10 +11,16 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "*",
+    "@workspace/db": "workspace:*",
+    "@workspace/ui": "workspace:*",
+    "@workspace/utils": "workspace:*",
+    "dotenv": "^17.3.1",
+    "jsonwebtoken": "^9.0.3",
     "next": "16.1.5",
+    "next-auth": "^4.24.13",
     "react": "^19.2.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^15.4.6",
@@ -23,6 +29,7 @@
     "@repo/typescript-config": "*",
     "@tailwindcss/postcss": "^4.1.5",
     "@types/node": "^22.15.30",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
     "autoprefixer": "^10.4.20",
@@ -30,5 +37,8 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.5",
     "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "@types/node": "^25.3.0"
   }
 }
